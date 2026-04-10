@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            color: #2c2c2c;
+            margin: 0;
+            padding: 0;
+        }
+        .tg-hero {
+            background: linear-gradient(135deg, #0088cc 0%, #005f8e 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .tg-hero h1 {
+            font-size: 2.4em;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .tg-hero p {
+            font-size: 1.15em;
+            opacity: 0.9;
+            margin: 0;
+        }
+        .tg-section {
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .tg-section h2 {
+            font-size: 1.5em;
+            color: #0088cc;
+            border-bottom: 2px solid #e8f4fb;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .tg-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 0;
+        }
+        .tg-feature-card {
+            background: #f4faff;
+            border-left: 4px solid #0088cc;
+            border-radius: 6px;
+            padding: 16px 20px;
+        }
+        .tg-feature-card strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #005f8e;
+        }
+        .tg-feature-card p {
+            margin: 0;
+            font-size: 0.92em;
+            color: #555;
+        }
+        .tg-warning {
+            background: #fff8e1;
+            border-left: 4px solid #f9a825;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .tg-warning strong {
+            color: #e65100;
+        }
+        .tg-steps {
+            counter-reset: steps;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tg-steps li {
+            counter-increment: steps;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        .tg-steps li::before {
+            content: counter(steps);
+            background: #0088cc;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85em;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .tg-steps li .step-body {
+            flex: 1;
+        }
+        .tg-steps li .step-body strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+        }
+        .tg-steps li .step-body p {
+            margin: 0;
+            font-size: 0.92em;
+            color: #555;
+        }
+        .tg-code {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82em;
+            word-break: break-all;
+            margin: 8px 0 4px 0;
+        }
+        .tg-code .tg-placeholder {
+            color: #f38ba8;
+            font-weight: bold;
+        }
+        .tg-code .tg-value {
+            color: #a6e3a1;
+        }
+        .tg-hint {
+            font-size: 0.82em;
+            color: #888;
+            margin: 4px 0 0 0;
+        }
+        .tg-screenshot {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #dce8f0;
+            box-shadow: 0 4px 16px rgba(0,136,204,0.08);
+            margin-bottom: 10px;
+        }
+        .tg-screenshot-caption {
+            text-align: center;
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 28px;
+        }
+        .tg-alt {
+            background: #f7fafc;
+        }
+        .tg-badge-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+        .tg-badge {
+            background: #e8f4fb;
+            color: #005f8e;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+        .tg-badge.warn {
+            background: #fff3e0;
+            color: #bf360c;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="tg-hero">
+    <h1>📨 Send Telegram from Odoo</h1>
+    <p>Send text messages and PDF reports to Telegram contacts directly from any Odoo record</p>
+    <div class="tg-badge-row" style="justify-content:center; margin-top:20px;">
+        <span class="tg-badge" style="background:rgba(255,255,255,0.2);color:white;">Odoo 19</span>
+        <span class="tg-badge" style="background:rgba(255,255,255,0.2);color:white;">Self-hosted only</span>
+        <span class="tg-badge" style="background:rgba(255,255,255,0.2);color:white;">Community &amp; Enterprise</span>
+        <span class="tg-badge" style="background:rgba(255,255,255,0.2);color:white;">Free</span>
+    </div>
+</div>
+
+<!-- WARNING -->
+<div class="tg-section">
+    <div class="tg-warning">
+        <strong>⚠️ Self-hosted only</strong><br/>
+        This module requires a publicly accessible server URL for the Telegram webhook.
+        It does <strong>NOT</strong> work on <strong>Odoo Online (odoo.com)</strong> or any environment
+        where your server is not reachable from the internet.
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="tg-section" style="padding-top:0;">
+    <h2>Features</h2>
+    <div class="tg-features">
+        <div class="tg-feature-card">
+            <strong>📋 Send Telegram Button</strong>
+            <p>Appears in the chatter area of any configured model — next to WhatsApp button if installed.</p>
+        </div>
+        <div class="tg-feature-card">
+            <strong>📄 PDF Report Sending</strong>
+            <p>Select any allowed PDF report and send it directly as a document to Telegram.</p>
+        </div>
+        <div class="tg-feature-card">
+            <strong>💬 Text Messages</strong>
+            <p>Send a plain text message, a PDF, or both at the same time to multiple recipients.</p>
+        </div>
+        <div class="tg-feature-card">
+            <strong>🔗 Auto Chat ID Mapping</strong>
+            <p>Contact sends /start to your bot — Odoo auto-fills their Telegram Chat ID via webhook.</p>
+        </div>
+        <div class="tg-feature-card">
+            <strong>🎛️ Per-Model Configuration</strong>
+            <p>Control which models show the button, which reports are allowed, and which users can send.</p>
+        </div>
+        <div class="tg-feature-card">
+            <strong>📝 Message Logs</strong>
+            <p>Every send is logged — recipient, status, error, timestamp — plus a chatter note on the record.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="tg-section tg-alt" style="padding: 40px;">
+    <div style="max-width:900px; margin: 0 auto;">
+        <h2>Screenshots</h2>
+
+        <!-- Step 4 screenshot: Contact with telegram fields -->
+        <img src="screenshot_4_contact.png" class="tg-screenshot"
+             alt="Contact with Telegram Username and Chat ID fields"/>
+        <p class="tg-screenshot-caption">
+            Contact form — Telegram Username and Chat ID fields added to every partner
+        </p>
+
+        <!-- Step 2 screenshot: Settings -->
+        <img src="screenshot_2_settings.png" class="tg-screenshot"
+             alt="Settings — Bot Token and Webhook Secret Token"/>
+        <p class="tg-screenshot-caption">
+            Settings → Telegram — enter your Bot Token and Webhook Secret Token
+        </p>
+
+        <!-- Step 1 screenshot: Model Config -->
+        <img src="screenshot_1_model_config.png" class="tg-screenshot"
+             alt="Telegram Model Config form"/>
+        <p class="tg-screenshot-caption">
+            Telegram → Configuration → Model Configs — configure per-model access and allowed reports
+        </p>
+
+        <!-- Step 3 screenshot: Button on delivery -->
+        <img src="screenshot_3_delivery.png" class="tg-screenshot"
+             alt="Send Telegram button on Delivery Order"/>
+        <p class="tg-screenshot-caption">
+            Send Telegram button appears in the chatter area of any configured model (e.g. Delivery Order)
+        </p>
+    </div>
+</div>
+
+<!-- CONFIGURATION STEPS -->
+<div class="tg-section">
+    <h2>How to Configure</h2>
+    <ol class="tg-steps">
+
+        <li>
+            <div class="step-body">
+                <strong>Create a Telegram bot via @BotFather</strong>
+                <p>Open Telegram → search <code>@BotFather</code> → send <code>/newbot</code> → follow instructions → copy the <strong>Bot Token</strong>.</p>
+            </div>
+        </li>
+
+        <li>
+            <div class="step-body">
+                <strong>Enter Bot Token and Webhook Secret in Odoo Settings</strong>
+                <p>Go to <strong>Settings → Telegram</strong>. Enter your Bot Token. For Webhook Secret, choose any random string you like, for example:</p>
+                <div class="tg-code"><span class="tg-value">myodoo_tg_secret_2026</span></div>
+                <p class="tg-hint">Remember this string — you will use it in the next step.</p>
+            </div>
+        </li>
+
+        <li>
+            <div class="step-body">
+                <strong>Register the webhook with Telegram</strong>
+                <p>Open this URL in your browser once (replace the placeholders):</p>
+                <div class="tg-code">
+                    https://api.telegram.org/bot<span class="tg-placeholder">&lt;BOT_TOKEN&gt;</span>/setWebhook?url=https://<span class="tg-placeholder">&lt;YOUR_DOMAIN&gt;</span>/telegram/webhook/<span class="tg-placeholder">&lt;WEBHOOK_SECRET&gt;</span>
+                </div>
+                <p class="tg-hint">
+                    <span class="tg-placeholder">&lt;BOT_TOKEN&gt;</span> — token from @BotFather (step 1)<br/>
+                    <span class="tg-placeholder">&lt;YOUR_DOMAIN&gt;</span> — your Odoo server domain, e.g. <code>mycompany.odoo.com</code><br/>
+                    <span class="tg-placeholder">&lt;WEBHOOK_SECRET&gt;</span> — the secret you entered in Settings (step 2), e.g. <code>myodoo_tg_secret_2026</code>
+                </p>
+                <p style="margin-top:8px; font-size:0.92em; color:#555;">Full example:</p>
+                <div class="tg-code">
+                    https://api.telegram.org/bot<span class="tg-value">8602697632:AAEBSxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>/setWebhook?url=https://<span class="tg-value">mycompany.odoo.com</span>/telegram/webhook/<span class="tg-value">myodoo_tg_secret_2026</span>
+                </div>
+                <p class="tg-hint">If successful, Telegram returns: <code>{"ok":true,"result":true,"description":"Webhook was set"}</code></p>
+            </div>
+        </li>
+
+        <li>
+            <div class="step-body">
+                <strong>Create Model Configs</strong>
+                <p>Go to <strong>Telegram → Configuration → Model Configs → New</strong>.<br/>
+                Select a model (e.g. <em>Sales Order</em>), set Active ✅.<br/>
+                Optionally restrict which PDF reports and which users can send.</p>
+            </div>
+        </li>
+
+        <li>
+            <div class="step-body">
+                <strong>Add Telegram Username to contacts</strong>
+                <p>Open any contact in <strong>Contacts</strong>. Fill in <strong>Telegram Username</strong> (without @).<br/>
+                Example: if their Telegram is <code>@john_smith</code> → enter <code>john_smith</code>.</p>
+            </div>
+        </li>
+
+        <li>
+            <div class="step-body">
+                <strong>Contact sends /start to your bot</strong>
+                <p>The contact opens your bot in Telegram and sends <code>/start</code>.<br/>
+                Odoo automatically fills their <strong>Telegram Chat ID</strong> on the contact record.<br/>
+                After this they can be selected as a recipient.</p>
+            </div>
+        </li>
+
+        <li>
+            <div class="step-body">
+                <strong>Send from any record</strong>
+                <p>Open a Sales Order, Invoice, Delivery, or any configured model.<br/>
+                Click <strong>Send Telegram</strong> in the chatter area.<br/>
+                Select recipients, optionally choose a PDF report and/or type a message → <strong>Send</strong>.</p>
+            </div>
+        </li>
+
+    </ol>
+</div>
+
+<!-- TECH NOTES -->
+<div class="tg-section tg-alt" style="padding:40px;">
+    <div style="max-width:900px; margin:0 auto;">
+        <h2>Technical Notes</h2>
+        <ul style="font-size:0.95em; line-height:1.9; color:#444;">
+            <li>Odoo version: <strong>19</strong> (Community &amp; Enterprise)</li>
+            <li>Depends on: <code>mail</code>, <code>base</code> — no extra Python packages required</li>
+            <li>Webhook endpoint: <code>/telegram/webhook/&lt;secret_token&gt;</code></li>
+            <li>Bot token and webhook secret stored in <code>ir.config_parameter</code> (System Parameters)</li>
+            <li>Sending is synchronous (no background jobs)</li>
+            <li>Bulk send limit: <strong>20 recipients</strong> per action</li>
+            <li>PDF rendering uses Odoo's built-in <code>ir.actions.report</code></li>
+            <li>All sends logged in <strong>Telegram → Message Logs</strong> and as chatter notes</li>
+            <li>Incoming messages from Telegram are <strong>not</strong> processed (outgoing only)</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

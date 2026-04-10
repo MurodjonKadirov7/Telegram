@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_telegram" model="ir.ui.view">
+        <field name="name">res.config.settings.view.telegram</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Telegram" name="telegram_send" logo="/telegram_send/static/description/icon.png">
+                    <block title="Bot Configuration" name="telegram_bot_config">
+                        <setting string="Bot Token" help="Telegram bot token from @BotFather">
+                            <field name="telegram_bot_token"
+                                   placeholder="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ"
+                                   password="True"
+                            />
+                        </setting>
+                        <setting string="Webhook Secret Token" help="A secret string used to secure your webhook URL. Webhook URL: /telegram/webhook/YOUR_SECRET">
+                            <field name="telegram_webhook_secret"
+                                   placeholder="my_secret_token_123"
+                            />
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

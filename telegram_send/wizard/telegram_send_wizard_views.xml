@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="telegram_send_wizard_view_form" model="ir.ui.view">
+        <field name="name">telegram.send.wizard.form</field>
+        <field name="model">telegram.send.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Telegram">
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <group>
+                    <field name="partner_ids"
+                           widget="many2many_tags"
+                           options="{'no_create': True}"
+                           domain="[('telegram_chat_id', '!=', False), ('telegram_chat_id', '!=', '')]"
+                           string="Recipients"
+                    />
+                    <field name="allowed_report_domain_ids" invisible="1"/>
+                    <field name="report_id"
+                           string="Report (PDF)"
+                           options="{'no_create': True}"
+                           domain="[('id', 'in', allowed_report_domain_ids)]"
+                    />
+                    <field name="message"
+                           string="Message"
+                           placeholder="Type your message here..."
+                    />
+                </group>
+                <footer>
+                    <button name="action_send"
+                            string="Send"
+                            type="object"
+                            class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

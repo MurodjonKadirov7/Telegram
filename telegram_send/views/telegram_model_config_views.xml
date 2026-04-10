@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view -->
+    <record id="telegram_model_config_view_form" model="ir.ui.view">
+        <field name="name">telegram.model.config.form</field>
+        <field name="model">telegram.model.config</field>
+        <field name="arch" type="xml">
+            <form string="Telegram Model Config">
+                <sheet>
+                    <group>
+                        <field name="model_id"/>
+                        <field name="model_name" invisible="1"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Reports">
+                        <field name="allowed_report_ids"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"
+                               nolabel="1"
+                        />
+                    </group>
+                    <group string="Access Control">
+                        <p class="text-muted">
+                            Leave "Allowed Users" empty to allow all users to send Telegram messages.
+                        </p>
+                        <field name="allowed_user_ids"
+                               widget="many2many_tags"
+                               nolabel="1"
+                        />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List view -->
+    <record id="telegram_model_config_view_list" model="ir.ui.view">
+        <field name="name">telegram.model.config.list</field>
+        <field name="model">telegram.model.config</field>
+        <field name="arch" type="xml">
+            <list string="Telegram Model Configs">
+                <field name="model_id"/>
+                <field name="active"/>
+                <field name="allowed_report_ids" widget="many2many_tags"/>
+                <field name="allowed_user_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_telegram_model_config" model="ir.actions.act_window">
+        <field name="name">Telegram Model Configs</field>
+        <field name="res_model">telegram.model.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

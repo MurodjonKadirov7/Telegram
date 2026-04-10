@@ -1,0 +1,30 @@
+{
+    'name': 'Telegram Notifications & Reports',
+    'version': '19.0.1.0.0',
+    'summary': 'Send Telegram messages and PDF reports from any Odoo record via Telegram Bot',
+    'category': 'Productivity',
+    'author': 'Todoo',
+    'website': 'https://www.todoo.uz',
+    'license': 'OPL-1',
+    'price': 0.0,
+    'currency': 'USD',
+    'depends': ['mail', 'base'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/res_partner_views.xml',
+        'views/telegram_model_config_views.xml',
+        'views/telegram_message_log_views.xml',
+        'views/telegram_menus.xml',
+        'views/res_config_settings_views.xml',
+        'wizard/telegram_send_wizard_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'telegram_send/static/src/chatter/web/chatter_patch.xml',
+            'telegram_send/static/src/chatter/web/chatter_patch.js',
+        ],
+    },
+    'images': ['static/description/banner.png'],
+    'installable': True,
+    'application': False,
+}

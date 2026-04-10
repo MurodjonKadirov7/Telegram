@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List view -->
+    <record id="telegram_message_log_view_list" model="ir.ui.view">
+        <field name="name">telegram.message.log.list</field>
+        <field name="model">telegram.message.log</field>
+        <field name="arch" type="xml">
+            <list string="Telegram Message Logs" decoration-danger="status == 'error'" decoration-success="status == 'sent'">
+                <field name="sent_at"/>
+                <field name="partner_id"/>
+                <field name="chat_id"/>
+                <field name="res_model"/>
+                <field name="res_id"/>
+                <field name="report_id"/>
+                <field name="status"/>
+                <field name="sent_by"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="telegram_message_log_view_form" model="ir.ui.view">
+        <field name="name">telegram.message.log.form</field>
+        <field name="model">telegram.message.log</field>
+        <field name="arch" type="xml">
+            <form string="Telegram Message Log">
+                <sheet>
+                    <group>
+                        <group string="Recipient">
+                            <field name="partner_id"/>
+                            <field name="chat_id"/>
+                        </group>
+                        <group string="Document">
+                            <field name="res_model"/>
+                            <field name="res_id"/>
+                            <field name="report_id"/>
+                        </group>
+                    </group>
+                    <group string="Content">
+                        <field name="message_text" nolabel="1"/>
+                    </group>
+                    <group string="Result">
+                        <group>
+                            <field name="status"/>
+                            <field name="sent_at"/>
+                            <field name="sent_by"/>
+                        </group>
+                        <group>
+                            <field name="telegram_response"/>
+                            <field name="error_message"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_telegram_message_log" model="ir.actions.act_window">
+        <field name="name">Telegram Message Logs</field>
+        <field name="res_model">telegram.message.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
