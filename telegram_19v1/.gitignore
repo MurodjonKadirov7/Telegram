@@ -1,0 +1,17 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store
+__MACOSX/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Odoo
+*.log
