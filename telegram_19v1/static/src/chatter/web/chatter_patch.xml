@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<templates>
-    <t t-name="telegram_send.Chatter" t-inherit="mail.Chatter" t-inherit-mode="extension">
+<templates xml:space="preserve">
+    <t t-name="telegram_19v1.Chatter" t-inherit="mail.Chatter" t-inherit-mode="extension">
         <xpath expr="//t[@name='chatter-topbar-left-buttons']" position="inside">
             <button t-if="state.thread.canSendTelegram"
-                class="btn btn-secondary text-nowrap me-1"
-                t-att-class="{'my-2': !props.compactHeight }"
-                t-on-click="sendTelegram"
-            >
+                    class="btn btn-secondary text-nowrap me-1"
+                    t-att-class="{'my-2': !props.compactHeight}"
+                    t-on-click="sendTelegram">
                 <span>Send Telegram</span>
             </button>
         </xpath>

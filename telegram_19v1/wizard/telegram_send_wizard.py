@@ -1,4 +1,6 @@
+import base64
 import logging
+import mimetypes
 import requests
 
 from odoo import api, fields, models, _
@@ -34,6 +36,11 @@ class TelegramSendWizard(models.TransientModel):
         string='Report (PDF)',
     )
     message = fields.Text(string='Message')
+    attachment_ids = fields.Many2many(
+        comodel_name='ir.attachment',
+        relation='tg_wizard_attachment_rel',
+        string='Attachments',
+    )
     # Computed IDs used as domain filter for report_id in the view
     allowed_report_domain_ids = fields.Many2many(
         comodel_name='ir.actions.report',
@@ -65,7 +72,6 @@ class TelegramSendWizard(models.TransientModel):
         if rec_id:
             result['res_id'] = rec_id
 
-        # Pre-fill report domain is handled via onchange / domain on field
         return result
 
     # ----------------------------------------------------------------
@@ -86,8 +92,8 @@ class TelegramSendWizard(models.TransientModel):
         self.ensure_one()
         if not self.partner_ids:
             raise ValidationError(_('Please select at least one recipient.'))
-        if not self.message and not self.report_id:
-            raise ValidationError(_('Please enter a message or select a report to send.'))
+        if not self.message and not self.report_id and not self.attachment_ids:
+            raise ValidationError(_('Please enter a message, select a report, or add an attachment.'))
         if len(self.partner_ids) > BULK_SEND_LIMIT:
             raise ValidationError(
                 _('You can send to a maximum of %s recipients at a time.') % BULK_SEND_LIMIT
@@ -99,9 +105,13 @@ class TelegramSendWizard(models.TransientModel):
     def action_send(self):
         self.ensure_one()
         self._validate()
+        self._check_user_access()
+
+        record = self.env[self.res_model].browse(self.res_id).exists()
+        if not record:
+            raise UserError(_('The selected document no longer exists.'))
 
         bot_token = self._get_bot_token()
-        record = self.env[self.res_model].browse(self.res_id)
 
         pdf_data = None
         if self.report_id:
@@ -122,7 +132,15 @@ class TelegramSendWizard(models.TransientModel):
 
             # Send PDF
             if self.report_id and pdf_data:
-                ok, err = self._send_document(bot_token, chat_id, pdf_data, self.report_id.name)
+                ok, err = self._send_file(bot_token, chat_id, pdf_data, self.report_id.name + '.pdf', 'application/pdf')
+                if not ok:
+                    errors.append(err)
+
+            # Send attachments
+            for attachment in self.attachment_ids:
+                file_data = base64.b64decode(attachment.datas)
+                mimetype = attachment.mimetype or 'application/octet-stream'
+                ok, err = self._send_file(bot_token, chat_id, file_data, attachment.name, mimetype)
                 if not ok:
                     errors.append(err)
 
@@ -147,12 +165,22 @@ class TelegramSendWizard(models.TransientModel):
     # Helpers: Telegram API calls
     # ----------------------------------------------------------------
     def _get_bot_token(self):
-        token = self.env['ir.config_parameter'].sudo().get_param('telegram_send.bot_token')
+        token = self.env['ir.config_parameter'].sudo().get_param('telegram_19v1.bot_token')
         if not token:
             raise UserError(
                 _('Telegram bot token is not configured. Please go to Settings > Telegram.')
             )
         return token
+
+    def _check_user_access(self):
+        config = self.env['telegram.model.config'].search([
+            ('model_name', '=', self.res_model),
+            ('active', '=', True),
+        ], limit=1)
+        if not config:
+            raise UserError(_('Telegram sending is not configured for this document type.'))
+        if config.allowed_user_ids and self.env.user not in config.allowed_user_ids:
+            raise UserError(_('You are not allowed to send Telegram messages from this document type.'))
 
     def _send_message(self, token, chat_id, text):
         """Send plain text message. Returns (success, error_message)."""
@@ -167,15 +195,14 @@ class TelegramSendWizard(models.TransientModel):
             _logger.exception('Telegram sendMessage error for chat_id=%s', chat_id)
             return False, str(e)
 
-    def _send_document(self, token, chat_id, pdf_bytes, filename):
-        """Send PDF document. Returns (success, error_message)."""
+    def _send_file(self, token, chat_id, file_bytes, filename, mimetype):
+        """Send any file via Telegram. Returns (success, error_message)."""
         url = TELEGRAM_API_URL.format(token=token, method='sendDocument')
-        safe_filename = (filename or 'document').replace(' ', '_') + '.pdf'
         try:
             resp = requests.post(
                 url,
                 data={'chat_id': chat_id},
-                files={'document': (safe_filename, pdf_bytes, 'application/pdf')},
+                files={'document': (filename, file_bytes, mimetype)},
                 timeout=30,
             )
             data = resp.json()
@@ -189,7 +216,7 @@ class TelegramSendWizard(models.TransientModel):
     def _render_pdf(self, record):
         """Render the selected report to PDF bytes."""
         try:
-            pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf(
+            pdf_content, _report_type = self.env['ir.actions.report']._render_qweb_pdf(
                 self.report_id,
                 record.ids,
             )
@@ -267,6 +294,9 @@ class TelegramSendWizard(models.TransientModel):
                 parts.append(_('text'))
             if self.report_id:
                 parts.append(_('PDF: %s') % self.report_id.name)
+            if self.attachment_ids:
+                att_names = ', '.join(self.attachment_ids.mapped('name'))
+                parts.append(_('Files: %s') % att_names)
             lines.append(_('✅ Telegram sent to: %s (%s)') % (names, ', '.join(parts)))
 
         if failed_partners:
@@ -279,3 +309,26 @@ class TelegramSendWizard(models.TransientModel):
                 message_type='comment',
                 subtype_xmlid='mail.mt_note',
             )
+
+    @api.model
+    def default_get(self, fields_list):
+        result = super().default_get(fields_list)
+        ctx = self.env.context
+        model = ctx.get('active_model')
+        rec_id = ctx.get('active_id')
+
+        if model:
+            result['res_model'] = model
+        if rec_id:
+            result['res_id'] = rec_id
+
+        # Pre-fill with record's existing attachments
+        if model and rec_id:
+            attachments = self.env['ir.attachment'].search([
+                ('res_model', '=', model),
+                ('res_id', '=', rec_id),
+            ])
+            if attachments:
+                result['attachment_ids'] = [fields.Command.set(attachments.ids)]
+
+        return result

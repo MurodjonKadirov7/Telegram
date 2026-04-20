@@ -28,7 +28,7 @@ class TelegramWebhook(http.Controller):
         """
         # Verify secret token
         expected_token = request.env['ir.config_parameter'].sudo().get_param(
-            'telegram_send.webhook_secret'
+            'telegram_19v1.webhook_secret'
         )
         if not expected_token or secret_token != expected_token:
             _logger.warning('Telegram webhook: invalid secret token')

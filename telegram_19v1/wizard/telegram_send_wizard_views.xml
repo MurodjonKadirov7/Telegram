@@ -20,6 +20,11 @@
                            options="{'no_create': True}"
                            domain="[('id', 'in', allowed_report_domain_ids)]"
                     />
+                    <field name="attachment_ids"
+                           widget="many2many_tags"
+                           string="Attachments"
+                           domain="[('res_model', '=', res_model), ('res_id', '=', res_id)]"
+                    />
                     <field name="message"
                            string="Message"
                            placeholder="Type your message here..."

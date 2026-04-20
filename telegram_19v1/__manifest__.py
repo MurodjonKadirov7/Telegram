@@ -20,8 +20,8 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'telegram_send/static/src/chatter/web/chatter_patch.xml',
-            'telegram_send/static/src/chatter/web/chatter_patch.js',
+            'telegram_19v1/static/src/chatter/web/chatter_patch.xml',
+            'telegram_19v1/static/src/chatter/web/chatter_patch.js',
         ],
     },
     'images': ['static/description/banner.png'],

@@ -5,13 +5,14 @@
         id="menu_telegram_root"
         name="Telegram"
         sequence="80"
-        web_icon="telegram_send,static/description/icon.png"
+        web_icon="telegram_19v1,static/description/icon.png" groups="base.group_system"
     />
 
     <menuitem
         id="menu_telegram_config"
         name="Configuration"
         parent="menu_telegram_root"
+        groups="base.group_system"
         sequence="10"
     />
 
@@ -19,6 +20,7 @@
         id="menu_telegram_model_config"
         name="Model Configs"
         parent="menu_telegram_config"
+        groups="base.group_system"
         action="action_telegram_model_config"
         sequence="10"
     />
@@ -27,6 +29,7 @@
         id="menu_telegram_message_log"
         name="Message Logs"
         parent="menu_telegram_root"
+        groups="base.group_user"
         action="action_telegram_message_log"
         sequence="20"
     />

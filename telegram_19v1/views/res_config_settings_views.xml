@@ -4,13 +4,12 @@
         <field name="name">res.config.settings.view.telegram</field>
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
-        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
                 <app string="Telegram"
-                     name="telegram_send"
+                     name="telegram_19v1"
                      data-string="Telegram"
-                     logo="/telegram_send/static/description/icon.png">
+                     logo="/telegram_19v1/static/description/icon.png">
                     <block title="Bot Configuration" name="telegram_bot_config">
                         <setting string="Bot Token"
                                  help="Telegram bot token from @BotFather">
