@@ -6,7 +6,7 @@
     'author': 'Todoo',
     'website': 'https://www.todoo.uz',
     'license': 'OPL-1',
-    'price': 0.0,
+    'price': 49.0,
     'currency': 'USD',
     'depends': ['mail', 'base'],
     'data': [
